@@ -1,0 +1,20 @@
+{
+  "name": "node-starter",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@koa/router": "^10.0.0",
+    "axios": "^0.27.2",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-logger": "^3.2.1",
+    "koa-pino-logger": "^3.0.0",
+    "node-fetch": "^3.2.10",
+    "nodemon": "^2.0.19"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  }
+}
