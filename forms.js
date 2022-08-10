@@ -183,6 +183,6 @@ const getPollingStationsBySiteRoutine = async (center, stationNames) => {
 
 
 
-export {  getForms, getPrezForms, getCountyPrezForms };
+export {  getPrezForms, getCountyPrezForms };
 
 

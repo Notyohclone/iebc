@@ -6,7 +6,7 @@ const router = new Router();
 
 import bodyParser from "koa-bodyparser";
 import fs from "fs";
-import { getConstituencyForms, getPresidentialForms, getPrezForms } from "./forms.js";
+import {  getPrezForms } from "./forms.js";
 
 const app = new Koa();
 app.use(bodyParser());
@@ -65,12 +65,12 @@ router.post("/presidentialforms", async (ctx) => {
   ctx.body = forms;
 } );
 
-router.post("/forms", async (ctx) => {
-  ctx.request.socket.setTimeout(5 * 60 * 1000);
-  console.log(ctx.request.body);
-  const forms = await getConstituencyForms(ctx.request.body);
-  ctx.body = forms;
-} );
+// router.post("/forms", async (ctx) => {
+//   ctx.request.socket.setTimeout(5 * 60 * 1000);
+//   console.log(ctx.request.body);
+//   const forms = await getConstituencyForms(ctx.request.body);
+//   ctx.body = forms;
+// } );
 
 // Route to read the stored counties and for the counties missing the constituency data, get the constituency data and store it.
 
