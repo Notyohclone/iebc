@@ -81,7 +81,7 @@ router.post("/pstations", async (ctx) => {
 router.post("/presidentialforms", async (ctx) => {
   // Sample body:
   // {}
-  // THIS ROUTE IS EXTREMELY SLOW - OPTIMIZE
+  //  THIS ROUTE IS EXTREMELY SLOW IF THERE IS NO CACHING
   ctx.request.socket.setTimeout(5 * 60 * 1000);
   console.log(ctx.request.body);
   const forms = await getPresidentialForms(ctx.request.body);
@@ -90,8 +90,13 @@ router.post("/presidentialforms", async (ctx) => {
 } );
 router.post("/countyPresidentialforms", async (ctx) => {
   // Sample body:
-  // {}
-  // THIS ROUTE IS EXTREMELY SLOW - OPTIMIZE
+//   {
+//     "c": "7",
+//     "cc": "0440000000000",
+//     "n": "MIGORI",
+//     "cacheOnly": true
+// }
+  // THIS ROUTE IS EXTREMELY SLOW IF THERE IS NO CACHING - 
   ctx.request.socket.setTimeout(5 * 60 * 1000);
   console.log(ctx.request.body);
   const forms = await getCountyPrezForms({county: ctx.request.body, cacheOnly: ctx.request.body.cacheOnly});
@@ -139,6 +144,10 @@ const nameLookup = async (entry) => {
   return regionObject;
 }
 router.post("/getPrezForms", async (ctx) => {
+  // Sample body:
+//   {
+//     "cacheOnly": true
+// }
   ctx.request.socket.setTimeout(50 * 60 * 1000);
   console.log("getPrezForms");
   const prezForms = await getPrezForms(ctx.request.body);
