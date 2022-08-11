@@ -29,7 +29,9 @@ const getPrezForms = async ({cacheOnly}) => {
 
   console.log("Forms:",forms)
   fs.writeFileSync(`prezForms.json`, JSON.stringify(forms))
-  return forms;
+  return {
+    countryForms: forms
+  };
 }
 
 
