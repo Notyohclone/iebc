@@ -18,7 +18,12 @@ const getPrezForms = async ({cacheOnly}) => {
     // console.log(county);
     const constituenciesArr = await getCountyPrezForms({county: county, cacheOnly: cacheOnly});
     console.log(constituenciesArr);
-    forms.push(constituenciesArr);
+    forms.push({
+      countyName: county.n,
+      countyId: county.cc,
+      constituencies: constituenciesArr,
+      county: county,
+    });
 
     }
 
