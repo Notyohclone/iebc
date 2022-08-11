@@ -6,7 +6,7 @@ const router = new Router();
 
 import bodyParser from "koa-bodyparser";
 import fs from "fs";
-import {  getPrezForms } from "./forms.js";
+import {  getCountyPrezForms, getPrezForms, updateNullPaths } from "./forms.js";
 
 const app = new Koa();
 app.use(bodyParser());
@@ -88,13 +88,23 @@ router.post("/presidentialforms", async (ctx) => {
   // const forms = await getForms(ctx.request.body);
   ctx.body = forms;
 } );
+router.post("/countyPresidentialforms", async (ctx) => {
+  // Sample body:
+  // {}
+  // THIS ROUTE IS EXTREMELY SLOW - OPTIMIZE
+  ctx.request.socket.setTimeout(5 * 60 * 1000);
+  console.log(ctx.request.body);
+  const forms = await getCountyPrezForms({county: ctx.request.body, cacheOnly: ctx.request.body.cacheOnly});
+  // const forms = await getForms(ctx.request.body);
+  ctx.body = forms;
+} );
 
-// router.post("/forms", async (ctx) => {
-//   ctx.request.socket.setTimeout(5 * 60 * 1000);
-//   console.log(ctx.request.body);
-//   const forms = await getConstituencyForms(ctx.request.body);
-//   ctx.body = forms;
-// } );
+router.post("/updateNullPaths", async (ctx) => {
+  ctx.request.socket.setTimeout(5 * 60 * 1000);
+  console.log(ctx.request.body);
+  const forms = await updateNullPaths({countyObj: ctx.request.body, direct: false});
+  ctx.body = forms;
+} );
 
 // Route to read the stored counties and for the counties missing the constituency data, get the constituency data and store it.
 

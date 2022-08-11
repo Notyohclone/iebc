@@ -73,7 +73,7 @@ const getConstituenciesInCounty = async (county) => {
     // path is of the form regions/1/1001.json remove the .json
     path = path.substring(0, path.length - 5);
     // console.log(path);
-    console.log(county);
+    // console.log(county);
     let url = `${IEBC_BASE_URL}${path}_F.json`;
     // console.log(url);
     // const response = await fetch(`${IEBC_COUNTY_URL}${county.id}_F.json`, {
@@ -203,7 +203,7 @@ const getPollingStationsInCenter = async (ward, site) => {
     let path = region.rf;
     // path is of the form regions/1/1001.json remove the .json
     path = path.substring(0, path.length - 5);
-    console.log(path);
+    // console.log(path);
 
     try {
       const response = await fetch(`${IEBC_BASE_URL}${path}_F.json`, {
@@ -247,11 +247,64 @@ const getPollingStationsBySite = async (site) => {
     console.log(error);
     return {
       status: "error",
-      message: error.response.status,
+      message: error,
     };
   }
 };
+const getSiteByCawIdAndPollingStationId = async ({cawId,centerId, pollingStationId}) => {
+  const regions = await JSON.parse(fs.readFileSync("./regions.json", "utf8"));
+  const region = regions.find((region) => region.c === `${cawId}`);
+  // console.log(region);
+  // If the region object is not found, return an error object.
+  if (!region) {
+    return {
+      status: "error",
+      message: "Region not found",
+    };
+  } else {
+    // let path = region.rf;
+    // // path is of the form regions/1/1001.json remove the .json
+    // path = path.substring(0, path.length - 5);
+    // console.log(path);
 
+    let path = region.chp;
+    // path is of the form sites/0/r829.json remove the .json
+    path = path.substring(0, path.length - 5);
+    // console.log(path);
+    try {
+      const response = await fetch(`${IEBC_SITES_URL}${path}.json`, {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
+        },
+      });
+      let pollingCenters = await response.json();
+      pollingCenters = pollingCenters
+      // console.log("pollingCenters:",pollingCenters);
+      // Save the JSON to a file for later use.
+      // fs.writeFileSync(`${ward.id}_PS.json`, JSON.stringify(pollingStations));
+      // Now get the polling station for the give polling station id.
+      // console.log("pollingStationId", pollingStationId);
+      // console.log("centerId", centerId);
+      let pollingCenter = pollingCenters.find((pollingCenter) => pollingCenter.c === centerId);
+      let stations = await getPollingStationsBySite(pollingCenter);
+      stations = stations[0].forms[0].nl
+      // console.log("stations:",stations);
+      let pollingStation = stations.find((station) => station.ec === pollingStationId);
+      // console.log("pollingStation", pollingStation);
+      return pollingStation;
+      
+
+      // return pollingStations;
+    } catch (error) {
+      console.log(error);
+      return {
+        status: "error",
+        message: error.response.status,
+      };
+    }
+  } 
+}
 const getSitesInCAW = async (ward) => {
   // First check for the region object in the regions.json file. Use the rf field to get the url.
   const regions = await JSON.parse(fs.readFileSync("./regions.json", "utf8"));
@@ -351,7 +404,7 @@ const getStationNamesBySite = async (site) => {
     console.log(error);
     return {
       status: "error",
-      message: error.response.status,
+      message: error
     };
   }
 
@@ -368,5 +421,6 @@ export {
   getSitesInCAW,
   getPollingStationsBySite,
   getPrecinctsInCaw,
-  getStationNamesBySite
+  getStationNamesBySite,
+  getSiteByCawIdAndPollingStationId
 };
