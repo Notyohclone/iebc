@@ -29,14 +29,24 @@ router.get("/constituencies", async (ctx) => {
 });
 
 router.post("/constituencies", async (ctx) => {
+  // Sample body:
+  // {
+  //   "county": {
+  //     "id": 1,
+  // }
   console.log(ctx.request.body);
-  const  {county}  = ctx.request.body;
+  const { county } = ctx.request.body;
   const constituencies = await getConstituenciesInCounty(county);
 
   ctx.body = constituencies;
 });
 
 router.post("/caws", async (ctx) => {
+  // Sample body:
+  // {
+  //   "constituency": {
+  //     "id": 1194,
+  // }
   console.log(ctx.request.body);
   const  {constituency}  = ctx.request.body;
   const caws = await getCAWSInConstituency(constituency);
@@ -44,6 +54,11 @@ router.post("/caws", async (ctx) => {
 });
 
 router.post("/pcenters", async (ctx) => {
+  // Sample body:
+  // {
+  //   "caw": {
+  //     "id": 553,
+  // }
   console.log(ctx.request.body);
   const  {caw}  = ctx.request.body;
   const pollingStations = await getPollingCentersInCAW(caw);
@@ -51,6 +66,12 @@ router.post("/pcenters", async (ctx) => {
 } );
 
 router.post("/pstations", async (ctx) => {
+  // Sample body:
+  // {
+  //   "center": {
+  //     "id": 553,
+  // }
+  // This route requires the polling center data to work
   console.log(ctx.request.body);
   const  {center}  = ctx.request.body;
   const pollingStations = await getPollingStationsInCenter(center);
@@ -58,6 +79,9 @@ router.post("/pstations", async (ctx) => {
 } );
 
 router.post("/presidentialforms", async (ctx) => {
+  // Sample body:
+  // {}
+  // THIS ROUTE IS EXTREMELY SLOW - OPTIMIZE
   ctx.request.socket.setTimeout(5 * 60 * 1000);
   console.log(ctx.request.body);
   const forms = await getPresidentialForms(ctx.request.body);

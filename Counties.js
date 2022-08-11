@@ -188,7 +188,18 @@ const getPollingCentersInCAW = async (ward) => {
 };
 
 const getPollingStationsInCenter = async (ward, site) => {
- 
+  // First check for the region object in the regions.json file. Use the rf field to get the url.
+  const regions = await JSON.parse(fs.readFileSync("./regions.json", "utf8"));
+  const region = regions.find((region) => region.c === `${ward.id}`);
+  // console.log(region);
+  // If the region object is not found, return an error object.
+  if (!region) {
+    return {
+      status: "error",
+      message: "Region not found",
+    };
+  } else {
+
     let path = region.rf;
     // path is of the form regions/1/1001.json remove the .json
     path = path.substring(0, path.length - 5);
@@ -213,6 +224,7 @@ const getPollingStationsInCenter = async (ward, site) => {
         message: error.response.status,
       };
     }
+  }
   
 };
 const getPollingStationsBySite = async (site) => {
