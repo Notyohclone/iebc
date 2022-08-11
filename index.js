@@ -17,7 +17,9 @@ app.use(logger());
 
 
 
-// router.get('/', helloWorld);
+router.get('/', (ctx) => {
+  ctx.body = 'Sina Maoni!';
+});
 router.get("/counties", async (ctx) => {
   const counties = await getCounties();
   ctx.body = counties;
@@ -178,4 +180,4 @@ const delay = (ms) => {
 
 app.use(router.routes());
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
