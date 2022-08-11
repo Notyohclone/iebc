@@ -39,9 +39,7 @@ const getCounties = async () => {
   // const counties = allFields.filter((field) => field.L === 2);
   // Save the JSON to a file for later use.
   // fs.writeFileSync("counties.json", JSON.stringify(counties));
-  return {
-    counties: counties,
-  };
+  return counties;
 };
 
 const getConstituencies = async () => {
