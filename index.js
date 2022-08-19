@@ -26,6 +26,7 @@ router.get("/counties", async (ctx) => {
 });
 
 router.get("/constituencies", async (ctx) => {
+  // This route is faulty, you can only fetch constituencies for a county use the post method instead 
   const constituencies = await getConstituencies();
   ctx.body = constituencies;
 });
